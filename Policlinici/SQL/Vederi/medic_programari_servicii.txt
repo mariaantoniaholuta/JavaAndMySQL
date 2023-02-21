@@ -1,0 +1,6 @@
+CREATE VIEW MEDICI_SERVICII_PROGRAMARI AS
+SELECT ssc.denumire_specialitate, rf.id_programare, rf.luna_an, rf.cnp_medic, rf.nume, rf.prenume, ssc.denumire_serviciu, ssc.pret, GET_COMMISSION(ssc.pret, rf.cnp_medic) AS comision_medic 
+FROM raport_final_final AS rf
+JOIN servicii_specialitate_client AS ssc
+ON ssc.id_programare = rf.id_programare
+ORDER BY ssc.id_programare;

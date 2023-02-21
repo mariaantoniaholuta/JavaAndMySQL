@@ -1,0 +1,6 @@
+CREATE VIEW servicii_care_nu_sunt_custom AS
+SELECT s.id_serviciu, s.denumire_serviciu, s.pret, s.durata
+FROM servicii_medicale AS s
+LEFT JOIN servicii_custom_medic AS sc
+ON s.id_serviciu = sc.id_serviciu
+WHERE sc.id_serviciu IS NULL;

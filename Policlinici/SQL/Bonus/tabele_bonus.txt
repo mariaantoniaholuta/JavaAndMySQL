@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS cabinet(
+ id_cabinet int,
+ id_policlinica int,
+ numar_cabinet int,
+ foreign key(id_policlinica) references policlinica(id_policlinica),
+ primary key(id_cabinet, id_policlinica)
+);
+
+CREATE TABLE IF NOT EXISTS echipament_medical(
+ id_echipament int primary key,
+ denumire_echipament text(100)
+);
+
+CREATE TABLE IF NOT EXISTS portofoliu_echipament(
+ id_serviciu int,
+ id_echipament int,
+ foreign key(id_serviciu) references servicii_medicale(id_serviciu),
+ foreign key(id_echipament) references echipament_medical(id_echipament),
+ primary key(id_serviciu, id_echipament)
+); 
+
+CREATE TABLE IF NOT EXISTS lista_servicii_cabinet(
+ id_cabinet int,
+ id_serviciu int,
+ foreign key(id_serviciu) references servicii_medicale(id_serviciu),
+ foreign key(id_cabinet) references cabinet(id_cabinet),
+ primary key(id_serviciu, id_cabinet)
+);
+
+CREATE TABLE IF NOT EXISTS lista_echipament(
+ id_echipament int,
+ id_cabinet int,
+ foreign key(id_echipament) references echipament_medical(id_echipament),
+ foreign key(id_cabinet)  references cabinet(id_cabinet),
+ primary key(id_cabinet, id_echipament)
+)
+
+ALTER TABLE programare
+ADD id_cabinet int;
+ALTER TABLE programare
+ADD FOREIGN KEY(id_cabinet) references cabinet(id_cabinet); 

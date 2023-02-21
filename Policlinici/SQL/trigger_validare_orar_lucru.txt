@@ -1,0 +1,67 @@
+delimiter //
+CREATE TRIGGER VALIDARE_PROGRAM_LUCRU BEFORE INSERT ON orar_generic
+     FOR EACH ROW
+         BEGIN
+            SET @validare = 0;
+            SET @ora_inceput = (SELECT ora_inceput FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+            SET @ora_sfarsit = (SELECT ora_sfarsit FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+            IF(new.ora_inceput >= @ora_inceput AND new.ora_inceput <=@ora_sfarsit AND new.ora_sfarsit >= @ora_inceput AND  new.ora_sfarsit <= @ora_sfarsit) THEN
+                SET @validare = 1;
+			END IF;
+            IF (@validare = 0) THEN
+				SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+			END IF;
+         END //
+delimiter ;
+
+delimiter //
+CREATE TRIGGER VALIDARE_PROGRAM_LUCRU_UPDATE BEFORE UPDATE ON orar_generic
+     FOR EACH ROW
+         BEGIN
+            SET @validare = 0;
+            SET @ora_inceput = (SELECT ora_inceput FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+            SET @ora_sfarsit = (SELECT ora_sfarsit FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+            IF(new.ora_inceput >= @ora_inceput AND new.ora_inceput <=@ora_sfarsit AND new.ora_sfarsit >= @ora_inceput AND  new.ora_sfarsit <= @ora_sfarsit) THEN
+                SET @validare = 1;
+			END IF;
+            IF (@validare = 0) THEN
+				SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+			END IF;
+         END //
+delimiter ;
+
+delimiter //
+CREATE TRIGGER VALIDARE_PROGRAM_LUCRU_SPECIFIC BEFORE INSERT ON orar_specific
+     FOR EACH ROW
+         BEGIN
+            SET @validare = 0;
+            SET @ora_inceput = (SELECT ora_inceput FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+            SET @ora_sfarsit = (SELECT ora_sfarsit FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+            IF(new.ora_inceput >= @ora_inceput AND new.ora_inceput <=@ora_sfarsit AND new.ora_sfarsit >= @ora_inceput AND  new.ora_sfarsit <= @ora_sfarsit) THEN
+                SET @validare = 1;
+			END IF;
+            IF (@validare = 0) THEN
+				SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+			END IF;
+         END //
+delimiter ;
+
+delimiter //
+CREATE TRIGGER VALIDARE_PROGRAM_LUCRU_UPDATE_SPECIFIC BEFORE UPDATE ON orar_specific
+     FOR EACH ROW
+         BEGIN
+            SET @validare = 0;
+            SET @ora_inceput = (SELECT ora_inceput FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+            SET @ora_sfarsit = (SELECT ora_sfarsit FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+            IF(new.ora_inceput >= @ora_inceput AND new.ora_inceput <=@ora_sfarsit AND new.ora_sfarsit >= @ora_inceput AND  new.ora_sfarsit <= @ora_sfarsit) THEN
+                SET @validare = 1;
+			END IF;
+            IF (@validare = 0) THEN
+				SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+			END IF;
+         END //
+delimiter ;

@@ -1,0 +1,8 @@
+CREATE VIEW SERVICII_MEDICALE_EFECTUATE AS
+SELECT sm.id_serviciu, sm.denumire_serviciu, sm.pret, sd.luna_an
+FROM servicii_medicale AS sm
+JOIN (SELECT lsc.id_serviciu, pp.luna_an
+FROM profit_policlinica AS pp
+JOIN lista_servicii_client AS lsc
+ON pp.id_programare = lsc.id_programare) AS sd
+ON sm.id_serviciu = sd.id_serviciu;

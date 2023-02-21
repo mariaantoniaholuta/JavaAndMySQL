@@ -1,0 +1,7 @@
+CREATE VIEW servicii_posibile AS
+SELECT c.id_cabinet, c.id_policlinica, le.id_echipament, pe.id_serviciu
+FROM cabinet AS c, lista_echipament AS le
+JOIN portofoliu_echipament AS pe
+ON pe.id_echipament = le.id_echipament
+WHERE c.id_cabinet = le.id_cabinet
+ORDER BY c.id_cabinet;

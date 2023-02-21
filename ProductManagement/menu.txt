@@ -1,0 +1,5 @@
+product 0,salt;bread,20,2
+product 45,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;,156.0,1
+product 2,Barbecued Shrimp     ;Cauliflower-Leek Purée     ;Red and Green Tomato Salsa     ;,122.0,2
+product 54,Arugula Salad with Heirloom Tomatoes and Red Onion     ;Red Pepper Sauce     ;Classic Salad     ;,132.0,1
+product 66,Quick & Spicy Asian Pickles     ;Barbecued Shrimp     ;Cilantro-Tomato Salsa     ;The Original Three-Ingredient Rub     ;Shrimp Sates with Spiced Pistachio Chutney     ;,276.0,1

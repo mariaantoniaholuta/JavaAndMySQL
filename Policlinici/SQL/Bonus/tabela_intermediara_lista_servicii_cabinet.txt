@@ -1,0 +1,5 @@
+CREATE VIEW tabela_intermediara_creare_lista AS
+SELECT id_cabinet, id_policlinica, id_serviciu, COUNT(*) AS numar_echipamente_serviciu 
+FROM servicii_posibile
+GROUP BY CONCAT(id_cabinet, " ", id_serviciu)
+ORDER BY id_cabinet;

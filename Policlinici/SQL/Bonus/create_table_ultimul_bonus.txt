@@ -1,0 +1,10 @@
+USE lant_policlinici;
+
+CREATE TABLE servicii_custom_medic(
+ id_serviciu int,
+ cnp_medic varchar(20),
+ cost float,
+ durata int,
+ foreign key(cnp_medic) references medic(cnp),
+ primary key(id_serviciu, cnp_medic)
+);

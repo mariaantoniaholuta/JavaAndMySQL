@@ -1,0 +1,6 @@
+      CINEMA BILL      
+Client __________ Joyous
+Movie ___________ Hunt, The (Caza, La)
+Cantity _________  2
+Price per One ____ 34
+Total Price ______ 68

@@ -1,0 +1,9 @@
+CREATE FUNCTION CHECK_VALID_DAY(data_calendar date, cnp_angajat varchar(20)) 
+RETURNS INT
+		BEGIN
+			 SET @intervall = (SELECT IF(COUNT(*) > 0, 0, 1) FROM concediu WHERE data_plecare <= data_calendar AND data_calendar <= data_plecare AND cnp_angajat = cnp);
+             SET @generic = (SELECT IF(COUNT(*) > 0, 1, 0) FROM orar_generic WHERE cnp_angajat = cnp AND DAYNAME(data_calendar) = zi);
+             SET @specificc = (SELECT IF(COUNT(*) > 0, 1, 0) FROM orar_specific WHERE cnp_angajat = cnp AND data_calendar = data_inregistrare);
+             RETURN (@intervall * (@generic + @speficicc));
+		END //
+delimiter ;

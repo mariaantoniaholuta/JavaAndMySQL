@@ -1,0 +1,5 @@
+Products: 
+product 45......156.0
+product 2......122.0
+
+Total Price: ......278.0

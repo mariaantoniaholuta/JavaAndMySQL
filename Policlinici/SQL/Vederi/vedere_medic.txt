@@ -1,0 +1,5 @@
+CREATE VIEW RAPORT_MEDIC AS
+SELECT r.cnp_medic, CONCAT(MONTHNAME(p.data_consultatie), " ", YEAR(p.data_consultatie)) AS luna_an, p.id_programare, p.id_policlinica, p.data_consultatie,
+(cost_final - GET_COMMISSION(r.cost_final, r.cnp_medic)) AS cost_fara_comision, GET_COMMISSION(r.cost_final, r.cnp_medic) AS comision_medic
+FROM raport_medical as r
+JOIN programare as p ON r.id_programare = p.id_programare;

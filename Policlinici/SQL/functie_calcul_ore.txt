@@ -1,0 +1,15 @@
+SET GLOBAL log_bin_trust_function_creators = 1;
+delimiter //
+CREATE FUNCTION GET_ORE(data_calendar date, cnp_angajat varchar(20)) 
+RETURNS INT
+		BEGIN
+             SET @ore_lucrate = 0;
+             SET @specificc = (SELECT IF(COUNT(*) > 0, 1, 0) FROM orar_specific WHERE cnp_angajat = cnp AND data_calendar = data_inregistrare);
+             if @specificc = 1 THEN
+                  SET @ore_lucrate = (SELECT TIMESTAMPDIFF(HOUR, ora_inceput, ora_sfarsit) FROM orar_specific WHERE cnp = cnp_angajat AND data_calendar = data_inregistrare);
+             ELSE
+                  SET @ore_lucrate = (SELECT TIMESTAMPDIFF(HOUR, ora_inceput, ora_sfarsit) FROM orar_generic WHERE cnp = cnp_angajaT AND DAYNAME(data_calendar) = zi);
+			 END IF;
+             RETURN @ore_lucrate;
+		END //
+delimiter ;

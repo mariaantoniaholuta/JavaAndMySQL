@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.AddToMenu">
+  <grid id="27dc6" binding="firstPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="518" height="565"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <tabbedpane id="52218" binding="tabbedPane1" default-binding="true">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="200" height="200"/>
+          </grid>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="323a4" layout-manager="GridLayoutManager" row-count="7" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Add to Menu"/>
+            </constraints>
+            <properties>
+              <background color="-14079694"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="c0a0c" class="javax.swing.JButton" binding="goBackButton" default-binding="true">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-11184541"/>
+                  <font name="Segoe UI Black" size="12" style="3"/>
+                  <foreground color="-3552823"/>
+                  <text value="&lt;&lt;Go Back"/>
+                </properties>
+              </component>
+              <scrollpane id="ec0de" binding="tablePanel">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-11184541"/>
+                  <foreground color="-3552823"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="dad75" class="javax.swing.JTable" binding="table1">
+                    <constraints/>
+                    <properties>
+                      <background color="-723724"/>
+                      <font name="Rockwell" size="16" style="0"/>
+                      <foreground color="-11184541"/>
+                      <gridColor color="-13172480"/>
+                      <preferredScrollableViewportSize width="450" height="100"/>
+                      <selectionBackground color="-11184541"/>
+                      <selectionForeground color="-723724"/>
+                      <showHorizontalLines value="true"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+              <component id="958c4" class="javax.swing.JButton" binding="selectButton">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-11184541"/>
+                  <font name="Segoe UI Black" size="18" style="3"/>
+                  <foreground color="-3552823"/>
+                  <text value="SELECT"/>
+                </properties>
+              </component>
+              <component id="fb350" class="javax.swing.JLabel" binding="selectedLabel">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <foreground color="-8676417"/>
+                  <text value="click on a product from the table and than on SELECT"/>
+                </properties>
+              </component>
+              <component id="8b6aa" class="javax.swing.JButton" binding="addButton">
+                <constraints>
+                  <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-11184541"/>
+                  <font name="Segoe UI Black" size="18" style="3"/>
+                  <foreground color="-3552823"/>
+                  <text value="ADD"/>
+                </properties>
+              </component>
+              <component id="ac574" class="javax.swing.JLabel" binding="addLabel">
+                <constraints>
+                  <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-13087645"/>
+                  <font name="Sitka Small" size="16" style="1"/>
+                  <foreground color="-11177841"/>
+                  <text value="Add these products to a menu item:"/>
+                </properties>
+              </component>
+              <component id="ea98b" class="javax.swing.JTextField" binding="cantityFld">
+                <constraints>
+                  <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-7039851"/>
+                  <font name="Segoe UI Black" size="16" style="1"/>
+                  <foreground color="-3552823"/>
+                  <horizontalAlignment value="0"/>
+                  <text value="cantity"/>
+                </properties>
+              </component>
+              <hspacer id="996a">
+                <constraints>
+                  <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <hspacer id="9a71f">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+            </children>
+          </grid>
+          <grid id="617b8" binding="mainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Menu"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <scrollpane id="fb57" binding="tablePanel3">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-11184541"/>
+                  <foreground color="-3552823"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="1ad7d" class="javax.swing.JTable" binding="table3">
+                    <constraints/>
+                    <properties>
+                      <background color="-723724"/>
+                      <font name="Rockwell" size="16" style="0"/>
+                      <foreground color="-11184541"/>
+                      <gridColor color="-13172480"/>
+                      <preferredScrollableViewportSize width="450" height="100"/>
+                      <selectionBackground color="-11184541"/>
+                      <selectionForeground color="-723724"/>
+                      <showHorizontalLines value="true"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+              <component id="2c4d3" class="javax.swing.JButton" binding="refreshButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-11184541"/>
+                  <font name="Segoe UI Black" size="12" style="3"/>
+                  <foreground color="-3552823"/>
+                  <text value="Refresh"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </tabbedpane>
+    </children>
+  </grid>
+</form>

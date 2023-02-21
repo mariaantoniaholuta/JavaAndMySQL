@@ -1,0 +1,6 @@
+CREATE VIEW RAPORT_FINAL_FINAL AS
+SELECT rm.cnp_medic, rm.nume, rm.prenume, rm.luna_an, rm.id_programare, rm.id_policlinica, rm.data_consultatie, rm.cost_fara_comision, rm.comision_medic, p.nume AS nume_policlinica
+FROM raport_final_medic AS rm
+JOIN policlinica AS p 
+ON p.id_policlinica = rm.id_policlinica
+ORDER BY rm.nume ASC, rm.prenume ASC;

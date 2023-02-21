@@ -1,0 +1,6 @@
+CREATE VIEW  servicii_ce_necesita_competente AS
+SELECT c.cnp, lc.id_serviciu, sm.denumire_serviciu
+FROM competenta AS c, lista_competente AS lc
+JOIN servicii_medicale AS sm
+ON lc.id_serviciu = sm.id_serviciu
+WHERE c.competenta = lc.competenta;

@@ -1,0 +1,4 @@
+CREATE VIEW TOTAL_SALARII_LUNA AS
+SELECT SUM(salariu) AS total_salarii, luna_an
+FROM salarii_luna 
+GROUP BY luna_an;

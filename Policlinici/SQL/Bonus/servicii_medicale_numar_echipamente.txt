@@ -1,0 +1,5 @@
+CREATE VIEW servicii_medicale_numar_echipamente AS
+SELECT id_serviciu, denumire_serviciu, COUNT(*) AS numar_echipamente_necesare 
+FROM servicii_medicale_echipamente_necesare
+GROUP BY id_serviciu
+ORDER BY id_serviciu;

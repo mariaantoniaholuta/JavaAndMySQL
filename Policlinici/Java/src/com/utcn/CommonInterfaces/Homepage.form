@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.utcn.CommonInterfaces.Homepage">
+  <grid id="27dc6" binding="homepagePanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="562" height="806"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <tabbedpane id="a8d36" binding="mainPane">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="200" height="200"/>
+          </grid>
+        </constraints>
+        <properties>
+          <font name="Rockwell" size="14" style="2"/>
+          <foreground color="-14400182"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="6ce68" binding="home" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Home"/>
+            </constraints>
+            <properties>
+              <background color="-14400182"/>
+              <font name="Rockwell" size="12" style="0"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="b08dc" class="javax.swing.JButton" binding="gestiune_resurse_umane">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14328735"/>
+                  <font name="Rockwell" size="26" style="3"/>
+                  <foreground color="-5846603"/>
+                  <text value="Gestiune Resurse Umane"/>
+                </properties>
+              </component>
+              <vspacer id="453b1">
+                <constraints>
+                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="b2278" class="javax.swing.JButton" binding="operatii_financiar_contabile">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14328735"/>
+                  <font name="Rockwell" size="26" style="3"/>
+                  <foreground color="-5846603"/>
+                  <text value="Operatii Financiar Contabile"/>
+                </properties>
+              </component>
+              <component id="21ad2" class="javax.swing.JButton" binding="gestiune_activitati_operationale">
+                <constraints>
+                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14328735"/>
+                  <font name="Rockwell" size="26" style="3"/>
+                  <foreground color="-5846603"/>
+                  <text value="Gestiune Activitati Operationale"/>
+                </properties>
+              </component>
+              <hspacer id="4ad29">
+                <constraints>
+                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <hspacer id="2f27b">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <component id="cd4c1" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Rockwell" size="36"/>
+                  <foreground color="-5846603"/>
+                  <text value="-------Selecteaza modulul------- "/>
+                </properties>
+              </component>
+              <vspacer id="68ed2">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="1813a" class="javax.swing.JLabel" binding="error">
+                <constraints>
+                  <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Rockwell" size="20" style="1"/>
+                  <foreground color="-2200477"/>
+                  <text value="   "/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="5cf66" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Account Info"/>
+            </constraints>
+            <properties>
+              <background color="-14400182"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <scrollpane id="5a50d" binding="tablePanel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-11775918"/>
+                  <foreground color="-5846603"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="4e557" class="javax.swing.JTable" binding="table">
+                    <constraints/>
+                    <properties>
+                      <background color="-14400182"/>
+                      <font name="Rockwell" size="16" style="0"/>
+                      <foreground color="-5846603"/>
+                      <gridColor color="-11966379"/>
+                      <preferredScrollableViewportSize width="450" height="100"/>
+                      <selectionBackground color="-5846603"/>
+                      <selectionForeground color="-14400182"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
+          <grid id="d30d7" binding="grade" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Gradele mele"/>
+            </constraints>
+            <properties>
+              <toolTipText value=""/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="cc52b" class="javax.swing.JTable" binding="table1" default-binding="true">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="50"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-14400182"/>
+                  <font name="Rockwell" size="16"/>
+                  <foreground color="-5846603"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="ba9f2" binding="serviciiMedic" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Serviciile mele"/>
+            </constraints>
+            <properties>
+              <background color="-14400182"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <scrollpane id="c1be1">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14400182"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="20e7c" class="javax.swing.JTable" binding="tableServicii">
+                    <constraints/>
+                    <properties>
+                      <background color="-14400182"/>
+                      <font name="Rockwell" size="16"/>
+                      <foreground color="-5846603"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
+        </children>
+      </tabbedpane>
+      <component id="a25e1" class="javax.swing.JButton" binding="logOutBtn">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-11775918"/>
+          <font name="Rockwell" size="20" style="1"/>
+          <foreground color="-5846603"/>
+          <text value="Log Out"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

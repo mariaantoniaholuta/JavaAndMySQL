@@ -1,0 +1,5 @@
+admin password administrator
+client password client
+employee password employee
+username password client
+client2 password client

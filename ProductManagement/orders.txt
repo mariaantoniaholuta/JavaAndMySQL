@@ -1,0 +1,9 @@
+1,1,2022/05/08 20:05:01,176.0,product 1,salt
+23,117,2022/05/08 21:21:50,176.0,product 45-product 0-,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;salt;bread
+24,117,2022/05/08 21:21:50,176.0,product 45-product 0-,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;salt;bread
+97,177,2022/05/08 21:28:00,176.0,product 45-product 0-,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;salt;bread
+81,245,2022/05/08 21:37:48,312.0,product 45-product 45-,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;
+17,277,2022/05/08 21:44:05,176.0,product 45-product 0-,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;salt;bread
+103,78,2022/05/08 21:45:00,176.0,product 45-product 0-,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;salt;bread
+177,285,2022/05/08 21:46:29,468.0,product 45-product-45-product-45-,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;
+74,109,2022/05/09 02:14:15,278.0,product 45-product 2-,Barbecued Shrimp ;Red and Green Tomato Salsa ;The Original Three-Ingredient Rub ;Barbecued Shrimp     ;Cauliflower-Leek Purée     ;Red and Green Tomato Salsa     ;

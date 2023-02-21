@@ -1,0 +1,5 @@
+CREATE VIEW SERVICII_MEDICALE_CU_SPECIALITATE AS
+SELECT ps.denumire_specialitate, sm.id_serviciu, sm.denumire_serviciu, sm.pret, sm.luna_an
+FROM portofoliu_servicii AS ps
+JOIN servicii_medicale_efectuate AS sm
+ON ps.id_serviciu = sm.id_serviciu;

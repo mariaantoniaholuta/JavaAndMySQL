@@ -1,0 +1,8 @@
+delimiter //
+CREATE FUNCTION GET_COMMISSION(cost float, cnp_medic varchar(20)) 
+RETURNS FLOAT
+		BEGIN
+			 SET @comision = (SELECT comision FROM medic WHERE cnp = cnp_medic);
+             RETURN ((@comision * cost) / 100);
+		END //
+delimiter ;

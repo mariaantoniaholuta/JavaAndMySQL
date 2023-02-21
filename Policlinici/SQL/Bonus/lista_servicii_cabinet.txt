@@ -1,0 +1,7 @@
+CREATE VIEW lista_servicii_cabinet AS
+SELECT ti.id_policlinica, ti.id_cabinet, ti.id_serviciu 
+FROM tabela_intermediara_creare_lista AS ti
+JOIN servicii_medicale_numar_echipamente AS sm
+ON ti.id_serviciu = sm.id_serviciu
+WHERE ti.numar_echipamente_serviciu = sm.numar_echipamente_necesare
+ORDER BY id_policlinica, id_cabinet;

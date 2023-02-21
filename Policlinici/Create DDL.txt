@@ -1,0 +1,784 @@
+CREATE IF NOT EXISTS lant_policlinici;
+use lant_policlinici;
+
+
+create table if not exists analize_medicale
+(
+    id_programare     int         not null,
+    detalii_analize   text        null,
+    validare          tinyint(1)  null,
+    analiza_efectuata varchar(50) null,
+    constraint analize_medicale_pk
+        unique (id_programare, analiza_efectuata)
+);
+
+create table if not exists angajat
+(
+    cnp              varchar(20) not null,
+    utilizator       varchar(20) null,
+    parola           varchar(20) null,
+    adresa           varchar(30) null,
+    email            varchar(30) null,
+    nume             varchar(20) null,
+    prenume          varchar(20) null,
+    numar_ore        int         null,
+    telefon          varchar(20) null,
+    iban             varchar(20) null,
+    data_angajare    date        null,
+    functie          varchar(20) null,
+    salariu_negociat varchar(10) null,
+    primary key (cnp)
+);
+
+create trigger CHECK_USERNAME_DUPLICAT
+    before update
+    on angajat
+    for each row
+BEGIN
+    SET @validare = (SELECT IF(COUNT(*) > 0, 0, 1) FROM angajat where utilizator = new.utilizator);
+    IF (@validare != 0) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Username existent!';
+    END IF;
+END;
+
+create table if not exists asistent_medical
+(
+    cnp  varchar(20) not null,
+    grad varchar(30) null,
+    tip  varchar(30) null,
+    primary key (cnp),
+    constraint asistent_medical_ibfk_1
+        foreign key (cnp) references angajat (cnp)
+            on update cascade
+);
+
+create table if not exists echipament_medical
+(
+    id_echipament       int  not null,
+    denumire_echipament text null,
+    primary key (id_echipament)
+);
+
+create table if not exists medic
+(
+    cnp              varchar(20) not null,
+    post_didactic    varchar(20) null,
+    cod_parafa       int         null,
+    comision         int         null,
+    titlu_stiintific varchar(30) null,
+    primary key (cnp),
+    constraint medic_ibfk_1
+        foreign key (cnp) references angajat (cnp)
+);
+
+create table if not exists competenta
+(
+    cnp        varchar(20)                                                                                                                                                                                                                                                                                                  not null,
+    competenta enum ('ecografie', 'endoscopie digestivă', 'ecocardiografie', 'cardiologie intervențională', 'bronhoscopie', 'EEG', 'EMG', 'dializă', 'chirurgie laparoscopică', 'chirurgie toracică', 'chirurgie spinală', 'litotriție extracorporeală', 'explorare computer tomograf/imagistică prin rezonanță magnetică') not null,
+    primary key (cnp, competenta),
+    constraint competenta_ibfk_1
+        foreign key (cnp) references medic (cnp)
+            on update cascade
+);
+
+create index bla1
+    on competenta (competenta);
+
+create table if not exists concediu
+(
+    cnp           varchar(20) not null,
+    data_plecare  date        not null,
+    data_revenire date        null,
+    primary key (cnp, data_plecare),
+    constraint concediu_ibfk_1
+        foreign key (cnp) references medic (cnp)
+            on update cascade
+);
+
+create table if not exists pacient
+(
+    cnp     varchar(20) not null,
+    nume    varchar(20) null,
+    prenume varchar(20) null,
+    primary key (cnp)
+);
+
+create table if not exists policlinica
+(
+    id_policlinica int auto_increment
+        primary key,
+    nume           varchar(30) null,
+    numar_cabinete int         null,
+    descriere      text        null,
+    adresa         varchar(30) null
+);
+
+create table if not exists cabinet
+(
+    id_cabinet     int not null,
+    id_policlinica int not null,
+    numar_cabinet  int null,
+    primary key (id_cabinet, id_policlinica),
+    constraint cabinet_ibfk_1
+        foreign key (id_policlinica) references policlinica (id_policlinica)
+);
+
+create index id_policlinica
+    on cabinet (id_policlinica);
+
+create table if not exists lista_echipament
+(
+    id_echipament int not null,
+    id_cabinet    int not null,
+    primary key (id_cabinet, id_echipament),
+    constraint lista_echipament_ibfk_1
+        foreign key (id_echipament) references echipament_medical (id_echipament),
+    constraint lista_echipament_ibfk_2
+        foreign key (id_cabinet) references cabinet (id_cabinet)
+);
+
+create index id_echipament
+    on lista_echipament (id_echipament);
+
+create table if not exists orar_generic
+(
+    cnp            varchar(20) not null,
+    id_policlinica int         not null,
+    ora_inceput    time        null,
+    ora_sfarsit    time        null,
+    zi             varchar(20) not null,
+    primary key (cnp, id_policlinica, zi),
+    constraint orar_generic_ibfk_1
+        foreign key (cnp) references angajat (cnp)
+            on update cascade,
+    constraint orar_generic_ibfk_2
+        foreign key (id_policlinica) references policlinica (id_policlinica)
+            on update cascade
+);
+
+create index id_policlinica
+    on orar_generic (id_policlinica);
+
+create trigger VALIDARE_PROGRAM_LUCRU
+    before insert
+    on orar_generic
+    for each row
+BEGIN
+    SET @validare = 0;
+    SET @ora_inceput = (SELECT ora_inceput FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+    SET @ora_sfarsit = (SELECT ora_sfarsit FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+    IF (new.ora_inceput >= @ora_inceput AND new.ora_inceput <= @ora_sfarsit AND new.ora_sfarsit >= @ora_inceput AND
+        new.ora_sfarsit <= @ora_sfarsit) THEN
+        SET @validare = 1;
+    END IF;
+    IF (@validare = 0) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+    END IF;
+END;
+
+create trigger VALIDARE_PROGRAM_LUCRU_UPDATE
+    before update
+    on orar_generic
+    for each row
+BEGIN
+    SET @validare = 0;
+    SET @ora_inceput = (SELECT ora_inceput FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+    SET @ora_sfarsit = (SELECT ora_sfarsit FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+    IF (new.ora_inceput >= @ora_inceput AND new.ora_inceput <= @ora_sfarsit AND new.ora_sfarsit >= @ora_inceput AND
+        new.ora_sfarsit <= @ora_sfarsit) THEN
+        SET @validare = 1;
+    END IF;
+    IF (@validare = 0) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+    END IF;
+END;
+
+create table if not exists orar_policlinica
+(
+    id_policlinica int         not null,
+    id_orar        int         not null,
+    zi             varchar(30) null,
+    ora_inceput    time        null,
+    ora_sfarsit    time        null,
+    primary key (id_policlinica, id_orar),
+    constraint orar_policlinica_ibfk_1
+        foreign key (id_policlinica) references policlinica (id_policlinica)
+);
+
+create table if not exists orar_specific
+(
+    cnp               varchar(20) not null,
+    id_policlinica    int         not null,
+    ora_inceput       time        null,
+    ora_sfarsit       time        null,
+    data_inregistrare date        not null,
+    primary key (cnp, id_policlinica, data_inregistrare),
+    constraint orar_specific_ibfk_1
+        foreign key (cnp) references angajat (cnp)
+            on update cascade,
+    constraint orar_specific_ibfk_2
+        foreign key (id_policlinica) references policlinica (id_policlinica)
+            on update cascade
+);
+
+create index id_policlinica
+    on orar_specific (id_policlinica);
+
+create trigger VALIDARE_PROGRAM_LUCRU_SPECIFIC
+    before insert
+    on orar_specific
+    for each row
+BEGIN
+    SET @validare = 0;
+    SET @ora_inceput = (SELECT ora_inceput FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+    SET @ora_sfarsit = (SELECT ora_sfarsit FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+    IF (new.ora_inceput >= @ora_inceput AND new.ora_inceput <= @ora_sfarsit AND new.ora_sfarsit >= @ora_inceput AND
+        new.ora_sfarsit <= @ora_sfarsit) THEN
+        SET @validare = 1;
+    END IF;
+    IF (@validare = 0) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+    END IF;
+END;
+
+create trigger VALIDARE_PROGRAM_LUCRU_UPDATE_SPECIFIC
+    before update
+    on orar_specific
+    for each row
+BEGIN
+    SET @validare = 0;
+    SET @ora_inceput = (SELECT ora_inceput FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+    SET @ora_sfarsit = (SELECT ora_sfarsit FROM orar_policlinica WHERE id_policlinica = new.id_policlinica);
+    IF (new.ora_inceput >= @ora_inceput AND new.ora_inceput <= @ora_sfarsit AND new.ora_sfarsit >= @ora_inceput AND
+        new.ora_sfarsit <= @ora_sfarsit) THEN
+        SET @validare = 1;
+    END IF;
+    IF (@validare = 0) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+    END IF;
+END;
+
+create table if not exists programare
+(
+    id_programare    int auto_increment
+        primary key,
+    id_policlinica   int         null,
+    cnp_pacient      varchar(20) null,
+    cnp_medic        varchar(20) null,
+    data_consultatie date        null,
+    ora              time        null,
+    id_cabinet       int         null,
+    ora_sfarsit      time        null,
+    nrBon            int         null,
+    constraint programare_ibfk_1
+        foreign key (cnp_pacient) references pacient (cnp)
+            on update cascade,
+    constraint programare_ibfk_2
+        foreign key (cnp_medic) references medic (cnp)
+            on update cascade,
+    constraint programare_ibfk_3
+        foreign key (id_policlinica) references policlinica (id_policlinica)
+            on update cascade,
+    constraint programare_ibfk_4
+        foreign key (id_cabinet) references cabinet (id_cabinet)
+);
+
+create index cnp_medic
+    on programare (cnp_medic);
+
+create index cnp_pacient
+    on programare (cnp_pacient);
+
+create index id_cabinet
+    on programare (id_cabinet);
+
+create index id_policlinica
+    on programare (id_policlinica);
+
+create table if not exists raport_medical
+(
+    id_programare            int         not null,
+    cnp_medic                varchar(20) null,
+    diagnostic               text        null,
+    recomandari              text        null,
+    simptome                 text        null,
+    nume_medic_recomandat    varchar(20) null,
+    prenume_medic_recomandat varchar(20) null,
+    nume_medic_consultant    varchar(20) null,
+    prenume_medic_consultant varchar(20) null,
+    nume_asistent            varchar(20) null,
+    prenume_asistent         varchar(20) null,
+    moment_parafare          timestamp   null,
+    cost_final               float       null,
+    primary key (id_programare),
+    constraint raport_medical_ibfk_1
+        foreign key (id_programare) references programare (id_programare)
+            on update cascade,
+    constraint raport_medical_ibfk_2
+        foreign key (cnp_medic) references medic (cnp)
+            on update cascade
+);
+
+create index cnp_medic
+    on raport_medical (cnp_medic);
+
+create table if not exists salariu
+(
+    cnp           varchar(20) not null,
+    salariu       float       null,
+    data_incasare date        not null,
+    primary key (cnp, data_incasare),
+    constraint salariu_ibfk_1
+        foreign key (cnp) references angajat (cnp)
+            on update cascade
+);
+
+create trigger CHECK_EMITERE_SALARIU
+    before insert
+    on salariu
+    for each row
+BEGIN
+    SET @validare = (SELECT IF(COUNT(*) > 0, 0, 1)
+                     FROM salariu
+                     where ABS(DATEDIFF(data_incasare, new.data_incasare)) <= 28
+                       AND cnp = new.cnp);
+    IF (@validare = 0) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Salariu emis pentru luna curenta!';
+    END IF;
+END;
+
+create table if not exists servicii_custom_medic
+(
+    id_serviciu int         not null,
+    cnp_medic   varchar(20) not null,
+    cost        float       null,
+    durata      int         null,
+    primary key (id_serviciu, cnp_medic),
+    constraint servicii_custom_medic_ibfk_1
+        foreign key (cnp_medic) references medic (cnp)
+);
+
+create index cnp_medic
+    on servicii_custom_medic (cnp_medic);
+
+create table if not exists servicii_medicale
+(
+    id_serviciu       int auto_increment
+        primary key,
+    durata            int          null,
+    denumire_serviciu varchar(150) null,
+    pret              float        null
+);
+
+create table if not exists investigatie
+(
+    id_raport            int  null,
+    id_serviciu          int  null,
+    detalii_investigatie text null,
+    constraint investigatie_ibfk_1
+        foreign key (id_raport) references raport_medical (id_programare)
+            on update cascade,
+    constraint investigatie_ibfk_2
+        foreign key (id_serviciu) references servicii_medicale (id_serviciu)
+            on update cascade
+);
+
+create index id_raport
+    on investigatie (id_raport);
+
+create index id_serviciu
+    on investigatie (id_serviciu);
+
+create table if not exists lista_competente
+(
+    competenta  enum ('ecografie', 'endoscopie digestivă', 'ecocardiografie', 'cardiologie intervențională', 'bronhoscopie', 'EEG', 'EMG', 'dializă', 'chirurgie laparoscopică', 'chirurgie toracică', 'chirurgie spinală', 'litotriție extracorporeală', 'explorare computer tomograf/imagistică prin rezonanță magnetică') not null,
+    id_serviciu int                                                                                                                                                                                                                                                                                                          not null,
+    primary key (id_serviciu, competenta),
+    constraint lista_competente_ibfk_1
+        foreign key (competenta) references competenta (competenta),
+    constraint lista_competente_ibfk_2
+        foreign key (id_serviciu) references servicii_medicale (id_serviciu)
+);
+
+create index competenta
+    on lista_competente (competenta);
+
+create table if not exists lista_servicii_client
+(
+    id_serviciu   int not null,
+    id_programare int not null,
+    primary key (id_serviciu, id_programare),
+    constraint lista_servicii_client_ibfk_1
+        foreign key (id_serviciu) references servicii_medicale (id_serviciu)
+            on update cascade,
+    constraint lista_servicii_client_ibfk_2
+        foreign key (id_programare) references programare (id_programare)
+            on update cascade
+);
+
+create index id_programare
+    on lista_servicii_client (id_programare);
+
+create table if not exists portofoliu_echipament
+(
+    id_serviciu   int not null,
+    id_echipament int not null,
+    primary key (id_serviciu, id_echipament),
+    constraint portofoliu_echipament_ibfk_1
+        foreign key (id_serviciu) references servicii_medicale (id_serviciu),
+    constraint portofoliu_echipament_ibfk_2
+        foreign key (id_echipament) references echipament_medical (id_echipament)
+);
+
+create index id_echipament
+    on portofoliu_echipament (id_echipament);
+
+create index bla
+    on servicii_medicale (id_serviciu);
+
+create table if not exists specialitate
+(
+    denumire_specialitate varchar(30) not null,
+    primary key (denumire_specialitate)
+);
+
+create table if not exists grad
+(
+    cnp                   varchar(20)                   not null,
+    grad                  enum ('specialist', 'primar') null,
+    denumire_specialitate varchar(30)                   not null,
+    primary key (cnp, denumire_specialitate),
+    constraint grad_ibfk_1
+        foreign key (cnp) references medic (cnp)
+            on update cascade,
+    constraint grad_ibfk_2
+        foreign key (denumire_specialitate) references specialitate (denumire_specialitate)
+            on update cascade
+);
+
+create index denumire_specialitate
+    on grad (denumire_specialitate);
+
+create table if not exists portofoliu_servicii
+(
+    denumire_specialitate varchar(30) not null,
+    id_serviciu           int         not null,
+    primary key (denumire_specialitate, id_serviciu),
+    constraint portofoliu_servicii_ibfk_1
+        foreign key (denumire_specialitate) references grad (denumire_specialitate)
+            on update cascade,
+    constraint portofoliu_servicii_ibfk_2
+        foreign key (id_serviciu) references servicii_medicale (id_serviciu)
+            on update cascade
+);
+
+create index id_serviciu
+    on portofoliu_servicii (id_serviciu);
+
+create or replace view lista_servicii_cabinet as
+select `lant_policlinici`.`ti`.`id_policlinica` AS `id_policlinica`,
+       `lant_policlinici`.`ti`.`id_cabinet`     AS `id_cabinet`,
+       `lant_policlinici`.`ti`.`id_serviciu`    AS `id_serviciu`
+from (`lant_policlinici`.`tabela_intermediara_creare_lista` `ti`
+         join `lant_policlinici`.`servicii_medicale_numar_echipamente` `sm`
+              on ((`lant_policlinici`.`ti`.`id_serviciu` = `lant_policlinici`.`sm`.`id_serviciu`)))
+where (`lant_policlinici`.`ti`.`numar_echipamente_serviciu` = `lant_policlinici`.`sm`.`numar_echipamente_necesare`)
+order by `lant_policlinici`.`ti`.`id_policlinica`, `lant_policlinici`.`ti`.`id_cabinet`;
+
+create or replace view lista_servicii_client_restrictie_echipamente as
+select distinct `lsc`.`id_serviciu` AS `id_serviciu`, `lsc`.`id_programare` AS `id_programare`
+from (`lant_policlinici`.`lista_servicii_client` `lsc`
+         join `lant_policlinici`.`portofoliu_echipament` `pe` on ((`pe`.`id_serviciu` = `lsc`.`id_serviciu`)));
+
+create or replace view medici_servicii_programari as
+select `lant_policlinici`.`ssc`.`denumire_specialitate`                                       AS `denumire_specialitate`,
+       `lant_policlinici`.`rf`.`id_programare`                                                AS `id_programare`,
+       `lant_policlinici`.`rf`.`luna_an`                                                      AS `luna_an`,
+       `lant_policlinici`.`rf`.`cnp_medic`                                                    AS `cnp_medic`,
+       `lant_policlinici`.`rf`.`nume`                                                         AS `nume`,
+       `lant_policlinici`.`rf`.`prenume`                                                      AS `prenume`,
+       `lant_policlinici`.`ssc`.`denumire_serviciu`                                           AS `denumire_serviciu`,
+       `lant_policlinici`.`ssc`.`pret`                                                        AS `pret`,
+       `GET_COMMISSION`(`lant_policlinici`.`ssc`.`pret`, `lant_policlinici`.`rf`.`cnp_medic`) AS `comision_medic`
+from (`lant_policlinici`.`raport_final_final` `rf`
+         join `lant_policlinici`.`servicii_specialitate_client` `ssc`
+              on ((`lant_policlinici`.`ssc`.`id_programare` = `lant_policlinici`.`rf`.`id_programare`)))
+order by `lant_policlinici`.`ssc`.`id_programare`;
+
+create or replace view profit_policlinica as
+select `lant_policlinici`.`rp`.`luna_an`       AS `luna_an`,
+       sum(`r`.`cost_final`)                   AS `cost_final`,
+       `lant_policlinici`.`rp`.`cnp_medic`     AS `cnp_medic`,
+       `lant_policlinici`.`rp`.`id_programare` AS `id_programare`
+from (`lant_policlinici`.`raport_medical` `r`
+         join `lant_policlinici`.`raport_medic` `rp`
+              on ((`r`.`id_programare` = `lant_policlinici`.`rp`.`id_programare`)))
+group by `lant_policlinici`.`rp`.`luna_an`
+order by `lant_policlinici`.`rp`.`data_consultatie` desc;
+
+create or replace view raport_final_final as
+select `lant_policlinici`.`rm`.`cnp_medic`          AS `cnp_medic`,
+       `lant_policlinici`.`rm`.`nume`               AS `nume`,
+       `lant_policlinici`.`rm`.`prenume`            AS `prenume`,
+       `lant_policlinici`.`rm`.`luna_an`            AS `luna_an`,
+       `lant_policlinici`.`rm`.`id_programare`      AS `id_programare`,
+       `lant_policlinici`.`rm`.`id_policlinica`     AS `id_policlinica`,
+       `lant_policlinici`.`rm`.`data_consultatie`   AS `data_consultatie`,
+       `lant_policlinici`.`rm`.`cost_fara_comision` AS `cost_fara_comision`,
+       `lant_policlinici`.`rm`.`comision_medic`     AS `comision_medic`,
+       `p`.`nume`                                   AS `nume_policlinica`
+from (`lant_policlinici`.`raport_final_medic` `rm`
+         join `lant_policlinici`.`policlinica` `p`
+              on ((`p`.`id_policlinica` = `lant_policlinici`.`rm`.`id_policlinica`)))
+order by `lant_policlinici`.`rm`.`nume`, `lant_policlinici`.`rm`.`prenume`;
+
+create or replace view raport_final_medic as
+select `lant_policlinici`.`rm`.`cnp_medic`          AS `cnp_medic`,
+       `a`.`nume`                                   AS `nume`,
+       `a`.`prenume`                                AS `prenume`,
+       `lant_policlinici`.`rm`.`luna_an`            AS `luna_an`,
+       `lant_policlinici`.`rm`.`id_programare`      AS `id_programare`,
+       `lant_policlinici`.`rm`.`id_policlinica`     AS `id_policlinica`,
+       `lant_policlinici`.`rm`.`data_consultatie`   AS `data_consultatie`,
+       `lant_policlinici`.`rm`.`cost_fara_comision` AS `cost_fara_comision`,
+       `lant_policlinici`.`rm`.`comision_medic`     AS `comision_medic`
+from (`lant_policlinici`.`raport_medic` `rm`
+         join `lant_policlinici`.`angajat` `a` on ((`a`.`cnp` = `lant_policlinici`.`rm`.`cnp_medic`)))
+order by `a`.`nume`, `a`.`prenume`;
+
+create or replace view raport_medic as
+select `r`.`cnp_medic`                                                              AS `cnp_medic`,
+       concat(monthname(`p`.`data_consultatie`), ' ', year(`p`.`data_consultatie`)) AS `luna_an`,
+       `p`.`id_programare`                                                          AS `id_programare`,
+       `p`.`id_policlinica`                                                         AS `id_policlinica`,
+       `p`.`data_consultatie`                                                       AS `data_consultatie`,
+       (`r`.`cost_final` - `GET_COMMISSION`(`r`.`cost_final`, `r`.`cnp_medic`))     AS `cost_fara_comision`,
+       `GET_COMMISSION`(`r`.`cost_final`, `r`.`cnp_medic`)                          AS `comision_medic`
+from (`lant_policlinici`.`raport_medical` `r`
+         join `lant_policlinici`.`programare` `p` on ((`r`.`id_programare` = `p`.`id_programare`)));
+
+create or replace view salarii_luna as
+select `s`.`salariu`                                                          AS `salariu`,
+       `s`.`cnp`                                                              AS `cnp`,
+       `a`.`nume`                                                             AS `nume`,
+       `a`.`prenume`                                                          AS `prenume`,
+       `a`.`functie`                                                          AS `functie`,
+       concat(monthname(`s`.`data_incasare`), ' ', year(`s`.`data_incasare`)) AS `luna_an`
+from (`lant_policlinici`.`salariu` `s`
+         join `lant_policlinici`.`angajat` `a` on ((`s`.`cnp` = `a`.`cnp`)));
+
+create or replace view servicii_care_nu_sunt_custom as
+select `s`.`id_serviciu`       AS `id_serviciu`,
+       `s`.`denumire_serviciu` AS `denumire_serviciu`,
+       `s`.`pret`              AS `pret`,
+       `s`.`durata`            AS `durata`
+from (`lant_policlinici`.`servicii_medicale` `s`
+         left join `lant_policlinici`.`servicii_custom_medic` `sc` on ((`s`.`id_serviciu` = `sc`.`id_serviciu`)))
+where (`sc`.`id_serviciu` is null);
+
+create or replace view servicii_care_nu_sunt_custom_final as
+select `lant_policlinici`.`s`.`id_serviciu`       AS `id_serviciu`,
+       `lant_policlinici`.`s`.`denumire_serviciu` AS `denumire_serviciu`,
+       `lant_policlinici`.`s`.`pret`              AS `pret`,
+       `lant_policlinici`.`s`.`durata`            AS `durata`,
+       `lant_policlinici`.`m`.`cnp`               AS `cnp`
+from (`lant_policlinici`.`servicii_care_nu_sunt_custom` `s`
+         join `lant_policlinici`.`servicii_pentru_medic` `m`
+              on ((`lant_policlinici`.`s`.`id_serviciu` = `lant_policlinici`.`m`.`id_serviciu`)));
+
+create or replace view servicii_ce_necesita_competente as
+select `c`.`cnp` AS `cnp`, `lc`.`id_serviciu` AS `id_serviciu`, `sm`.`denumire_serviciu` AS `denumire_serviciu`
+from `lant_policlinici`.`competenta` `c`
+         join (`lant_policlinici`.`lista_competente` `lc` join `lant_policlinici`.`servicii_medicale` `sm` on ((`lc`.`id_serviciu` = `sm`.`id_serviciu`)))
+where (`c`.`competenta` = `lc`.`competenta`);
+
+create or replace view servicii_custom_medic_cu_nume as
+select `s`.`id_serviciu`        AS `id_serviciu`,
+       `sm`.`denumire_serviciu` AS `denumire_serviciu`,
+       `s`.`cost`               AS `cost`,
+       `s`.`durata`             AS `durata`,
+       `s`.`cnp_medic`          AS `cnp_medic`
+from (`lant_policlinici`.`servicii_custom_medic` `s`
+         join `lant_policlinici`.`servicii_medicale` `sm` on ((`s`.`id_serviciu` = `sm`.`id_serviciu`)));
+
+create or replace view servicii_medicale_ce_nu_necesita_echipament as
+select `s`.`id_serviciu` AS `id_serviciu`
+from (`lant_policlinici`.`servicii_medicale` `s`
+         left join `lant_policlinici`.`portofoliu_echipament` `pe` on ((`s`.`id_serviciu` = `pe`.`id_serviciu`)))
+where (`pe`.`id_echipament` is null);
+
+create or replace view servicii_medicale_echipamente_necesare as
+select `sm`.`id_serviciu`         AS `id_serviciu`,
+       `sm`.`denumire_serviciu`   AS `denumire_serviciu`,
+       `pe`.`id_echipament`       AS `id_echipament`,
+       `em`.`denumire_echipament` AS `denumire_echipament`
+from `lant_policlinici`.`servicii_medicale` `sm`
+         join (`lant_policlinici`.`portofoliu_echipament` `pe` join `lant_policlinici`.`echipament_medical` `em` on ((`pe`.`id_echipament` = `em`.`id_echipament`)))
+where (`sm`.`id_serviciu` = `pe`.`id_serviciu`)
+order by `sm`.`id_serviciu`;
+
+create or replace view servicii_medicale_numar_echipamente as
+select `lant_policlinici`.`servicii_medicale_echipamente_necesare`.`id_serviciu`       AS `id_serviciu`,
+       `lant_policlinici`.`servicii_medicale_echipamente_necesare`.`denumire_serviciu` AS `denumire_serviciu`,
+       count(0)                                                                        AS `numar_echipamente_necesare`
+from `lant_policlinici`.`servicii_medicale_echipamente_necesare`
+group by `lant_policlinici`.`servicii_medicale_echipamente_necesare`.`id_serviciu`
+order by `lant_policlinici`.`servicii_medicale_echipamente_necesare`.`id_serviciu`;
+
+create or replace view servicii_pentru_medic as
+select `g`.`cnp` AS `cnp`, `ps`.`id_serviciu` AS `id_serviciu`, `ps`.`denumire_specialitate` AS `denumire_specialitate`
+from `lant_policlinici`.`grad` `g`
+         join (`lant_policlinici`.`specialitate` `s` join `lant_policlinici`.`portofoliu_servicii` `ps` on ((`s`.`denumire_specialitate` = `ps`.`denumire_specialitate`)))
+where (`s`.`denumire_specialitate` = `g`.`denumire_specialitate`);
+
+create or replace view servicii_pentru_medic_cu_nume as
+select `lant_policlinici`.`sm`.`cnp`         AS `cnp`,
+       `lant_policlinici`.`sm`.`id_serviciu` AS `id_serviciu`,
+       `m`.`denumire_serviciu`               AS `denumire_serviciu`
+from (`lant_policlinici`.`servicii_pentru_medic` `sm`
+         join `lant_policlinici`.`servicii_medicale` `m`
+              on ((`m`.`id_serviciu` = `lant_policlinici`.`sm`.`id_serviciu`)));
+
+create or replace view servicii_posibile as
+select `c`.`id_cabinet`     AS `id_cabinet`,
+       `c`.`id_policlinica` AS `id_policlinica`,
+       `le`.`id_echipament` AS `id_echipament`,
+       `pe`.`id_serviciu`   AS `id_serviciu`
+from `lant_policlinici`.`cabinet` `c`
+         join (`lant_policlinici`.`lista_echipament` `le` join `lant_policlinici`.`portofoliu_echipament` `pe` on ((`pe`.`id_echipament` = `le`.`id_echipament`)))
+where (`c`.`id_cabinet` = `le`.`id_cabinet`)
+order by `c`.`id_cabinet`;
+
+create or replace view servicii_specialitate_client as
+select `ps`.`denumire_specialitate` AS `denumire_specialitate`,
+       `smp`.`id_serviciu`          AS `id_serviciu`,
+       `smp`.`denumire_serviciu`    AS `denumire_serviciu`,
+       `smp`.`id_programare`        AS `id_programare`,
+       `smp`.`pret`                 AS `pret`
+from (`lant_policlinici`.`portofoliu_servicii` `ps`
+         join (select `sm`.`id_serviciu`       AS `id_serviciu`,
+                      `lsc`.`id_programare`    AS `id_programare`,
+                      `sm`.`pret`              AS `pret`,
+                      `sm`.`denumire_serviciu` AS `denumire_serviciu`
+               from (`lant_policlinici`.`servicii_medicale` `sm`
+                        join `lant_policlinici`.`lista_servicii_client` `lsc`
+                             on ((`lsc`.`id_serviciu` = `sm`.`id_serviciu`)))) `smp`
+              on ((`smp`.`id_serviciu` = `ps`.`id_serviciu`)));
+
+create or replace view tabela_intermediara_creare_lista as
+select `lant_policlinici`.`servicii_posibile`.`id_cabinet`     AS `id_cabinet`,
+       `lant_policlinici`.`servicii_posibile`.`id_policlinica` AS `id_policlinica`,
+       `lant_policlinici`.`servicii_posibile`.`id_serviciu`    AS `id_serviciu`,
+       count(0)                                                AS `numar_echipamente_serviciu`
+from `lant_policlinici`.`servicii_posibile`
+group by concat(`lant_policlinici`.`servicii_posibile`.`id_cabinet`, ' ',
+                `lant_policlinici`.`servicii_posibile`.`id_serviciu`)
+order by `lant_policlinici`.`servicii_posibile`.`id_cabinet`;
+
+create or replace view total_salarii_luna as
+select sum(`lant_policlinici`.`salarii_luna`.`salariu`) AS `total_salarii`,
+       `lant_policlinici`.`salarii_luna`.`luna_an`      AS `luna_an`
+from `lant_policlinici`.`salarii_luna`
+group by `lant_policlinici`.`salarii_luna`.`luna_an`;
+
+create or replace view total_venituri as
+select sum(`lant_policlinici`.`raport_medic`.`cost_fara_comision`) AS `venit`,
+       sum(`lant_policlinici`.`raport_medic`.`comision_medic`)     AS `comisioane`,
+       `lant_policlinici`.`raport_medic`.`luna_an`                 AS `luna_an`
+from `lant_policlinici`.`raport_medic`
+group by `lant_policlinici`.`raport_medic`.`luna_an`;
+
+create function CHECK_CABINET_VALID(data_calendar date, ora_inc time, ora_sf time, cabinet int) returns int
+BEGIN
+    SET @valid = (SELECT IF(COUNT(*) > 0, 0, 1)
+                  FROM programare
+                  WHERE data_calendar = data_consultatie
+                    AND cabinet = id_cabinet
+                    AND CHECK_INTERVAL_TIME(ora_inc, ora_sf, ora, ora_sfarsit) = 0);
+    RETURN @valid;
+END;
+
+create function CHECK_INTERVAL_TIME(ora_inc time, ora_sf time, ora_inc_p time, ora_sf_p time) returns int
+BEGIN
+    SET @valid = 1;
+    IF ora_inc_p <= ora_inc AND ora_inc <= ora_sf_p THEN
+        SET @valid = 0;
+    END IF;
+
+    IF ora_inc_p <= ora_sf AND ora_sf <= ora_sf_p THEN
+        SET @valid = 0;
+    END IF;
+
+    IF ora_inc_p <= ora_inc AND ora_sf <= ora_sf_p THEN
+        SET @valid = 0;
+    END IF;
+
+    RETURN @valid;
+END;
+
+create function CHECK_VALID_DAY(data_calendar date, cnp_angajat varchar(20)) returns int
+BEGIN
+    SET @intervall = (SELECT IF(COUNT(*) > 0, 0, 1)
+                      FROM concediu
+                      WHERE data_plecare <= data_calendar
+                        AND data_calendar <= data_plecare
+                        AND cnp_angajat = cnp);
+    SET @generic =
+            (SELECT IF(COUNT(*) > 0, 1, 0) FROM orar_generic WHERE cnp_angajat = cnp AND DAYNAME(data_calendar) = zi);
+    SET @specificc = (SELECT IF(COUNT(*) > 0, 1, 0)
+                      FROM orar_specific
+                      WHERE cnp_angajat = cnp AND data_calendar = data_inregistrare);
+    SET @expresie = (@intervall * (@generic + @specificc));
+    RETURN @expresie;
+END;
+
+create function GET_COMMISSION(cost float, cnp_medic varchar(20)) returns float
+BEGIN
+    SET @comision = (SELECT comision FROM medic WHERE cnp = cnp_medic);
+    RETURN ((@comision * cost) / 100);
+END;
+
+create function GET_NUMAR_ORE(data_emitere date, cnp_angajat varchar(20)) returns int
+BEGIN
+    SET @data_inceput = DATE_SUB(data_emitere, INTERVAL 28 DAY);
+    SET @ore_lucrate = 0;
+    WHILE @data_inceput <= data_emitere
+        DO
+            IF CHECK_VALID_DAY(@data_inceput, cnp_angajat) = 1 THEN
+                SET @ore_lucrate = @ore_lucrate + GET_ORE(@data_inceput, cnp_angajat);
+            END IF;
+            SET @data_inceput = DATE_ADD(@data_inceput, INTERVAL 1 DAY);
+        END WHILE;
+    RETURN @ore_lucrate;
+END;
+
+create function GET_ORE(data_calendar date, cnp_angajat varchar(20)) returns int
+BEGIN
+    SET @ore_lucrate = 0;
+    SET @generic =
+            (SELECT IF(COUNT(*) > 0, 1, 0) FROM orar_generic WHERE cnp_angajat = cnp AND DAYNAME(data_calendar) = zi);
+    SET @specificc = (SELECT IF(COUNT(*) > 0, 1, 0)
+                      FROM orar_specific
+                      WHERE cnp_angajat = cnp AND data_calendar = data_inregistrare);
+    IF @specificc = 1 THEN
+        SET @ore_lucrate = (SELECT TIMESTAMPDIFF(HOUR, ora_inceput, ora_sfarsit)
+                            FROM orar_specific
+                            WHERE cnp = cnp_angajat
+                              AND data_calendar = data_inregistrare);
+    ELSE
+        IF @generic = 1 THEN
+            SET @ore_lucrate = (SELECT TIMESTAMPDIFF(HOUR, ora_inceput, ora_sfarsit)
+                                FROM orar_generic
+                                WHERE cnp = cnp_angajaT
+                                  AND DAYNAME(data_calendar) = zi);
+        END IF;
+    END IF;
+    RETURN @ore_lucrate;
+END;
+

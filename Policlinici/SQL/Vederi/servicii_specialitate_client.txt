@@ -1,0 +1,8 @@
+CREATE VIEW SERVICII_SPECIALITATE_CLIENT AS
+SELECT ps.denumire_specialitate, smp.id_serviciu, smp.denumire_serviciu, smp.id_programare, smp.pret
+FROM portofoliu_servicii AS ps
+JOIN (SELECT sm.id_serviciu, lsc.id_programare, sm.pret, sm.denumire_serviciu
+FROM servicii_medicale AS sm
+JOIN lista_servicii_client AS lsc
+ON lsc.id_serviciu = sm.id_serviciu) AS smp
+ON smp.id_serviciu = ps.id_serviciu;

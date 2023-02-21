@@ -1,0 +1,11 @@
+delimiter //
+CREATE TRIGGER CHECK_USERNAME_DUPLICAT BEFORE UPDATE ON angajat
+     FOR EACH ROW
+         BEGIN
+            SET @validare = (SELECT IF(COUNT(*) > 0, 0, 1) FROM angajat where utilizator = new.utilizator);
+            IF (@validare != 0) THEN
+				SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Username existent!';
+			END IF;
+         END //
+delimiter ;

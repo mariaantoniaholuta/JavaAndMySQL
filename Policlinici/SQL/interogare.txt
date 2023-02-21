@@ -1,0 +1,7 @@
+SELECT sl.nume, sl.prenume, sl.salariu, (cl.cost_luna - sl.salariu) AS profit, cl.comisioane_totale, cl.luna_an 
+FROM salarii_luna AS sl,
+(SELECT cnp_medic, luna_an, SUM(cost_fara_comision) AS cost_luna, SUM(comision_medic) AS comisioane_totale, data_consultatie
+FROM raport_medic
+GROUP BY luna_an) AS cl
+WHERE cl.cnp_medic = sl.cnp AND cl.luna_an = sl.luna_an AND cl.cnp_medic = "3548355035221085"
+ORDER BY cl.data_consultatie;
