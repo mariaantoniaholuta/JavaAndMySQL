@@ -1,0 +1,15 @@
+Order ID: 1
+Total Cost: 4.0
+Order date: 2023-05-01
+Products: pr4
+
+Order ID: 2
+Total Cost: 4.0
+Order date: 2023-05-01
+Products: pr2 
+
+Order ID: 3
+Total Cost: 64.0
+Order date: 2023-05-01
+Products: pr1 pr3 
+

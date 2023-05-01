@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Order List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<h1>Order List</h1>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Total Cost</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Products</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="order : ${orders}">
+        <tr>
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.orderStatus}"></td>
+            <td th:text="${order.totalCost}"></td>
+            <td th:text="${order.date}"></td>
+            <td th:text="${order.hour}"></td>
+            <td>
+                <ul>
+                    <th:block th:each="product : ${order.products}">
+                        <li th:text="${product.name}"></li>
+                    </th:block>
+                </ul>
+            </td>
+            <td><a th:href="@{/employee/orders/update/{id}(id=${order.id})}">Change</a></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+</body>
+</html>

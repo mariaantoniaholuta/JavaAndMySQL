@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<h2>Create New Order</h2>
+<form th:action="@{/employee/orders/add}" th:object="${order}" method="post">
+
+
+    <div class="form-group">
+        <label for="products">Products ID:</label>
+        <input type="text" class="form-control" id="products" name="products" placeholder="Enter product IDs separated by commas" required>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Add Order</button>
+</form>
+
+
+</body>
+</html>

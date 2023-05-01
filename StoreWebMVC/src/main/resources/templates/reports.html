@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Select Dates</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+  <body>
+  <form method="post" th:action="@{/admin/reports}">
+    <div class="form-group">
+      <label for="startDate">Start date:</label>
+      <input type="date" class="form-control" id="startDate" name="startDate" th:value="${startDate}" required>
+    </div>
+    <div class="form-group">
+      <label for="endDate">End date:</label>
+      <input type="date" class="form-control" id="endDate" name="endDate" th:value="${endDate}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Generate Reports</button>
+  </form>
+
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Date</th>
+      <th>Products</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+      <td th:text="${order.id}"></td>
+      <td th:text="${order.date}"></td>
+      <td>
+        <ul>
+          <li th:each="product : ${order.products}" th:text="${product.id + ' - ' + product.name}"></li>
+        </ul>
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+
+  <form th:action="@{/admin/reports/mostOrdered}" method="post">
+    <button type="submit" class="btn btn-primary" style="background-color: #0077B5; align:center;">Generate Most Ordered Products</button>
+  </form>
+  <h2 style="background-color: #def4ff; text-align:center;">Most Ordered Products:</h2>
+  <ul style="background-color: #def4ff; text-align:center;">
+    <li th:each="product : ${mostOrdered}" th:text="${product}"></li>
+  </ul>
+  </body>
+</html>
