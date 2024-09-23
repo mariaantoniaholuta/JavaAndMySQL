@@ -1,5 +1,0 @@
-CREATE VIEW lista_servicii_client_restrictie_echipamente AS
-SELECT DISTINCT lsc.id_serviciu, lsc.id_programare FROM
-lista_servicii_client AS lsc
-JOIN portofoliu_echipament AS pe
-ON pe.id_serviciu = lsc.id_serviciu;

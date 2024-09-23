@@ -1,6 +1,0 @@
-CREATE VIEW servicii_pentru_medic AS
-SELECT g.cnp, ps.id_serviciu, ps.denumire_specialitate 
-FROM grad AS g, specialitate AS s
-JOIN portofoliu_servicii AS ps
-ON s.denumire_specialitate = ps.denumire_specialitate
-WHERE s.denumire_specialitate = g.denumire_specialitate;

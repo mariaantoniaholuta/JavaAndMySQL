@@ -1,6 +1,0 @@
-CREATE VIEW servicii_medicale_ce_nu_necesita_echipament AS
-SELECT s.id_serviciu 
-FROM servicii_medicale AS s
-LEFT JOIN portofoliu_echipament AS pe
-ON s.id_serviciu = pe.id_serviciu
-WHERE pe.id_echipament IS NULL;

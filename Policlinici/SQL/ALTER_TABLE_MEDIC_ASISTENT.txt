@@ -1,7 +1,0 @@
- Alter table medic add column titlu_stiintific varchar(30);
- 
- ALTER TABLE asistent_medical    
- MODIFY grad varchar(30);
- 
- ALTER TABLE asistent_medical
- MODIFY tip varchar(30);

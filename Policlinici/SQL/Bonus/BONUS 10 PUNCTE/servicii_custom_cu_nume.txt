@@ -1,5 +1,0 @@
-CREATE VIEW servicii_custom_medic_cu_nume AS
-SELECT s.id_serviciu, sm.denumire_serviciu, s.cost, s.durata, s.cnp_medic
-FROM servicii_custom_medic AS s
-JOIN servicii_medicale AS sm
-ON s.id_serviciu = sm.id_serviciu

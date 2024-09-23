@@ -1,7 +1,0 @@
-CREATE VIEW servicii_medicale_echipamente_necesare AS
-SELECT sm.id_serviciu, sm.denumire_serviciu, pe.id_echipament, em.denumire_echipament
-FROM servicii_medicale AS sm, portofoliu_echipament AS pe
-JOIN echipament_medical AS em
-ON pe.id_echipament = em.id_echipament 
-WHERE sm.id_serviciu = pe.id_serviciu
-ORDER BY sm.id_serviciu;

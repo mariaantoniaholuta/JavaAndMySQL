@@ -1,6 +1,0 @@
-CREATE VIEW PROFIT_POLICLINICA AS
-SELECT luna_an, SUM(r.cost_final) as cost_final, rp.cnp_medic, rp.id_programare
-FROM raport_medical as r
-INNER JOIN raport_medic as rp ON r.id_programare = rp.id_programare 
-GROUP BY rp.luna_an
-ORDER BY rp.data_consultatie DESC;

@@ -1,6 +1,0 @@
-CREATE VIEW RAPORT_FINAL_MEDIC AS
-SELECT rm.cnp_medic, a.nume, a.prenume, rm.luna_an, rm.id_programare, rm.id_policlinica, rm.data_consultatie, rm.cost_fara_comision, rm.comision_medic
-FROM raport_medic AS rm
-JOIN angajat AS a 
-ON a.cnp = rm.cnp_medic
-ORDER BY a.nume ASC, a.prenume ASC;

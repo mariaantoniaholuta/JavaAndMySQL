@@ -1,4 +1,0 @@
-CREATE VIEW Salarii_Luna AS
-SELECT s.salariu, s.cnp, a.nume, a.prenume, a.functie, CONCAT(MONTHNAME(s.data_incasare), " ", YEAR(s.data_incasare)) as luna_an
-FROM salariu AS s
-JOIN angajat as a ON s.cnp = a.cnp;

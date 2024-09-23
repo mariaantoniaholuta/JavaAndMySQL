@@ -1,4 +1,0 @@
-CREATE VIEW total_venituri AS
-SELECT SUM(cost_fara_comision) AS venit, SUM(comision_medic) AS comisioane, luna_an
-FROM raport_medic
-GROUP BY luna_an;
